@@ -1,0 +1,84 @@
+#include <iostream>
+#include <vector>
+
+// Helper function to print vector contents
+void printVector(const std::vector<int>& vec) {
+    for (int num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << "\n";
+}
+
+// Merges two sorted sub-vectors back into a single sorted piece
+void merge(std::vector<int>& vec, int left, int mid, int right) {
+    int n1 = mid - left + 1; // Size of left sub-vector
+    int n2 = right - mid;    // Size of right sub-vector
+
+    // Create temporary vectors to store segmented halves
+    std::vector<int> leftVec(n1);
+    std::vector<int> rightVec(n2);
+
+    // Copy original data over to temporary vectors
+    for (int i = 0; i < n1; i++) leftVec[i] = vec[left + i];
+    for (int j = 0; j < n2; j++) rightVec[j] = vec[mid + 1 + j];
+
+    // Iterators for tracking sub-vectors and main vector boundaries
+    int i = 0, j = 0, k = left;
+
+    // Compare elements side-by-side and overwrite original vector
+    while (i < n1 && j < n2) {
+        if (leftVec[i] <= rightVec[j]) {
+            vec[k] = leftVec[i];
+            i++;
+        } else {
+            vec[k] = rightVec[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Append any leftover elements from the left temporary vector
+    while (i < n1) {
+        vec[k] = leftVec[i];
+        i++;
+        k++;
+    }
+
+    // Append any leftover elements from the right temporary vector
+    while (j < n2) {
+        vec[k] = rightVec[j];
+        j++;
+        k++;
+    }
+}
+
+// Main recursive function executing the divide-and-conquer strategy
+void mergeSort(std::vector<int>& vec, int left, int right) {
+    if (left < right) {
+        // Equivalent to (left + right) / 2 but safe against numerical overflow
+        int mid = left + (right - left) / 2;
+
+        // Recursively isolate and sort the first and second halves
+        mergeSort(vec, left, mid);
+        mergeSort(vec, mid + 1, right);
+
+        // Stitch the independent sorted halves back together 
+        merge(vec, left, mid, right);
+    }
+}
+
+int main() {
+    // Unsorted target vector
+    std::vector<int> data = {12, 11, 13, 5, 6, 7};
+
+    std::cout << "--- Unsorted Data ---\n";
+    printVector(data);
+
+    // Perform Merge Sort across the entire index range
+    mergeSort(data, 0, data.size() - 1);
+
+    std::cout << "\n--- Sorted Data ---\n";
+    printVector(data);
+
+    return 0;
+}
