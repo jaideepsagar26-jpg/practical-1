@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+
+// Optimized Bubble Sort function
+void bubbleSort(std::vector<int>& arr) {
+    int n = arr.size();
+    bool swapped;
+    int passes = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        swapped = false;
+        passes++;
+        
+        // Inner loop runs up to the last unsorted element
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap adjacent elements if they are out of order
+                std::swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+        
+        // Optimization: If no elements were swapped, the array is already sorted
+        if (!swapped) {
+            break;
+        }
+    }
+    std::cout << "Sorting completed in " << passes << " pass(es).\n";
+}
+
+// Helper function to print vector elements
+void printVector(const std::vector<int>& arr) {
+    for (int num : arr) {
+        std::cout << num << " ";
+    }
+    std::cout << "\n";
+}
+
+int main() {
+    // Case 1: Unsorted Array
+    std::vector<int> unsortedArr = {64, 34, 25, 12, 22, 11, 90};
+    std::cout << "--- Case 1: Unsorted Array ---\n";
+    std::cout << "Original array: ";
+    printVector(unsortedArr);
+    
+    bubbleSort(unsortedArr);
+    
+    std::cout << "Sorted array:   ";
+    printVector(unsortedArr);
+    std::cout << "\n";
+
+    // Case 2: Already Sorted Array (Testing optimization)
+    std::vector<int> sortedArr = {11, 12, 22, 25, 34, 64, 90};
+    std::cout << "--- Case 2: Already Sorted Array ---\n";
+    std::cout << "Original array: ";
+    printVector(sortedArr);
+    
+    bubbleSort(sortedArr);
+    
+    std::cout << "Sorted array:   ";
+    printVector(sortedArr);
+
+    return 0;
+}
