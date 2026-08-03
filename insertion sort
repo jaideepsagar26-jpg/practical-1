@@ -1,0 +1,56 @@
+#include <iostream>
+
+// Function to print the array divided into sorted and unsorted parts
+void printStep(int arr[], int n, int sortedEndIndex) {
+    std::cout << "Sorted: [ ";
+    for (int i = 0; i <= sortedEndIndex; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << "] | Unsorted: [ ";
+    for (int i = sortedEndIndex + 1; i < n; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << "]\n";
+}
+
+// Insertion Sort function tracking sorted and unsorted sub-arrays
+void insertionSort(int arr[], int n) {
+    std::cout << "Initial State:\n";
+    // Initially, the first element (index 0) is considered a sorted sub-array of size 1
+    printStep(arr, n, 0); 
+    std::cout << "-------------------------------------------\n";
+
+    // Loop through the unsorted portion starting from index 1
+    for (int i = 1; i < n; i++) {
+        int key = arr[i]; // The element to be inserted
+        int j = i - 1;
+
+        // Move elements of the sorted portion that are greater than key
+        // to one position ahead of their current position
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key; // Insert the key at its correct position
+
+        std::cout << "Pass " << i << " (Inserted " << key << "):\n";
+        printStep(arr, n, i);
+        std::cout << "-------------------------------------------\n";
+    }
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    std::cout << "--- STARTING INSERTION SORT ---\n\n";
+    insertionSort(arr, n);
+
+    std::cout << "Final Sorted Array: ";
+    for (int i = 0; i < n; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << "\n";
+
+    return 0;
+}
